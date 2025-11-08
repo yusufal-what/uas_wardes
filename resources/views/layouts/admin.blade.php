@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Warung Desa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+    .sidebar {
+        width: 240px;
+        background: #0d6efd;
+        color: white;
+        position: fixed;
+        height: 100%;
+        padding-top: 20px;
+    }
+    .sidebar a {
+        display: block;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+    }
+    .sidebar a:hover {
+        background-color: #0b5ed7;
+    }
+    .content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h4 class="text-center fw-bold mb-4">Warung Desa</h4>
+    <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
+    <a href="{{ route('admin.item.index') }}">🍱 Manajemen Menu</a>
+    <a href="{{ route('admin.pesanan') }}">🧾 Pesanan Masuk</a>
+</div>
+
+<div class="content">
+    @yield('content')
+</div>
+
+</body>
+</html>
