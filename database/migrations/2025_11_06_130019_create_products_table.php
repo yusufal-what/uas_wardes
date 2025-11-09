@@ -12,7 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('harga');
-            $table->string('gambar')->nullable();
+            $table->enum('kategori', ['makanan', 'minuman']);
+            $table->string('gambar');
             $table->timestamps();
         });
     }

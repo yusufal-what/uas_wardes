@@ -9,16 +9,13 @@ class Item extends Model
 {
     use HasFactory;
 
+    // Beri tahu Laravel kalau model ini pakai tabel 'products'
+    protected $table = 'products';
+
     protected $fillable = [
         'nama',
         'harga',
+        'kategori',
         'gambar',
-        'category_id',
     ];
-
-    // Relasi ke tabel kategori
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 }

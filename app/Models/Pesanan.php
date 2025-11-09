@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Pesanan extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nama', // atau 'name' tergantung nama kolom di database
-    ];
+    protected $table = 'pesanans'; // ubah sesuai nama tabel kamu
 
-    public function items()
-    {
-        return $this->hasMany(Item::class);
-    }
+    protected $fillable = [
+        'nomor_meja',
+        'menu',
+        'total',
+        'status',
+    ];
 }

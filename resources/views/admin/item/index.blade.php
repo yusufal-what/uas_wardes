@@ -1,52 +1,62 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3 class="fw-bold">🍱 Manajemen Produk</h3>
-  <a href="{{ route('admin.item.create') }}" class="btn btn-primary">+ Tambah Produk</a>
-</div>
+<h3 class="fw-bold mb-3">🍱 Manajemen Produk</h3>
 
-@if(session('success'))
-  <div class="alert alert-success">{{ session('success') }}</div>
+{{-- Notifikasi sukses --}}
+@if (session('success'))
+<div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
+{{-- Tombol tambah produk --}}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ route('admin.item.create') }}" class="btn btn-success">+ Tambah Produk</a>
+</div>
+
+{{-- Tabel produk --}}
 <div class="card p-3">
-  <table class="table table-bordered align-middle text-center">
-    <thead class="table-primary">
+  <table class="table table-striped align-middle">
+    <thead>
       <tr>
         <th>#</th>
         <th>Gambar</th>
         <th>Nama Produk</th>
-        <th>Harga</th>
         <th>Kategori</th>
+        <th>Harga</th>
         <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
-      @forelse($items as $item)
+      @forelse ($produk as $p)
       <tr>
-        <td>{{ $loop->iteration }}</td>
+        <td>{{ $p->id }}</td>
+
+        {{-- ✅ Langkah 3: tampilkan gambar dari folder storage --}}
         <td>
-          @if($item->gambar)
-            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->nama }}" width="100">
+          @if ($p->gambar && file_exists(public_path('storage/' . $p->gambar)))
+            <img src="{{ asset('storage/' . $p->gambar) }}" width="70" height="70" class="rounded shadow-sm object-fit-cover">
           @else
-            <span>Tidak ada gambar</span>
+            <span class="text-muted fst-italic">Tidak ada gambar</span>
           @endif
         </td>
-        <td>{{ $item->nama }}</td>
-        <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-        <td>{{ $item->category->name ?? '-' }}</td>
+
+        <td>{{ $p->nama }}</td>
+        <td>{{ ucfirst($p->kategori) }}</td>
+        <td>Rp {{ number_format($p->harga, 0, ',', '.') }}</td>
+
         <td>
-          <a href="{{ route('admin.item.edit', $item->id) }}" class="btn btn-warning btn-sm me-1">Edit</a>
-          <form action="{{ route('admin.item.destroy', $item->id) }}" method="POST" class="d-inline">
+          <a href="{{ route('admin.item.edit', $p->id) }}" class="btn btn-sm btn-warning">Edit</a>
+          <form action="{{ route('admin.item.destroy', $p->id) }}" method="POST" class="d-inline">
             @csrf
             @method('DELETE')
-            <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus produk ini?')">Hapus</button>
+            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus produk ini?')">Hapus</button>
           </form>
         </td>
       </tr>
       @empty
-      <tr><td colspan="6" class="text-muted">Belum ada produk</td></tr>
+      <tr>
+        <td colspan="6" class="text-center text-muted">Belum ada produk.</td>
+      </tr>
       @endforelse
     </tbody>
   </table>
