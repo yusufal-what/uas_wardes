@@ -6,6 +6,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\AuthController;
+
+// 🔑 Login Admin
+Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');
+Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
 // ============================
 // 🏠 Halaman Utama (Landing Page)
@@ -18,7 +24,7 @@ Route::post('/pesan', [PesananController::class, 'store'])->name('pesanan.store'
 // ============================
 // 🔐 Area Admin (dengan middleware auth + verified)
 // ============================
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard Admin
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
