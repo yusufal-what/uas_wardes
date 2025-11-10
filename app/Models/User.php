@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -44,5 +45,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi ke model Cart (One to Many / Has Many)
+     * Satu user bisa memiliki banyak keranjang (history keranjang)
+     * 
+     * @return HasMany
+     */
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    /**
+     * Method helper untuk mendapatkan keranjang aktif user
+     * Memanggil method getActiveCart dari model Cart
+     * 
+     * @return Cart - Keranjang aktif user
+     */
+    public function getActiveCart(): Cart
+    {
+        return Cart::getActiveCart($this->id);
     }
 }

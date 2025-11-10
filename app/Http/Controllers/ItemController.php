@@ -3,69 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
-    // Menampilkan semua produk
     public function index()
     {
-        $produk = Item::latest()->get();
-        return view('admin.item.index', compact('produk'));
+        // Ambil semua item beserta relasi kategori
+        $items = Item::with('category')->latest()->get();
+        return view('admin.item.index', compact('items'));
     }
 
-    // Form tambah produk
     public function create()
     {
-        return view('admin.item.create');
+        $categories = Category::all();
+        return view('admin.item.create', compact('categories'));
     }
 
-    // Simpan produk baru
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $path = null;
         if ($request->hasFile('gambar')) {
-            // Simpan gambar ke storage/app/public/items
             $path = $request->file('gambar')->store('items', 'public');
         }
 
         Item::create([
             'nama' => $validated['nama'],
             'harga' => $validated['harga'],
-            'kategori' => $validated['kategori'],
             'gambar' => $path,
+            'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('admin.item.index')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('admin.item.index')->with('success', 'Item berhasil ditambahkan.');
     }
 
-    // Form edit produk
-    public function edit(Item $item)
+    public function edit($id)
     {
-        return view('admin.item.edit', compact('item'));
+        $item = Item::findOrFail($id);
+        $categories = Category::all();
+        return view('admin.item.edit', compact('item', 'categories'));
     }
 
-    // Update produk
     public function update(Request $request, Item $item)
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $gambarPath = $item->gambar;
 
-        // Hapus gambar lama jika ada dan upload baru
         if ($request->hasFile('gambar')) {
             if ($gambarPath && Storage::disk('public')->exists($gambarPath)) {
                 Storage::disk('public')->delete($gambarPath);
@@ -76,14 +74,13 @@ class ItemController extends Controller
         $item->update([
             'nama' => $validated['nama'],
             'harga' => $validated['harga'],
-            'kategori' => $validated['kategori'],
             'gambar' => $gambarPath,
+            'category_id' => $request->category_id ?? $item->category_id,
         ]);
 
-        return redirect()->route('admin.item.index')->with('success', 'Produk berhasil diperbarui!');
+        return redirect()->route('admin.item.index')->with('success', 'Item berhasil diperbarui!');
     }
 
-    // Hapus produk
     public function destroy(Item $item)
     {
         if ($item->gambar && Storage::disk('public')->exists($item->gambar)) {
@@ -91,7 +88,6 @@ class ItemController extends Controller
         }
 
         $item->delete();
-
-        return redirect()->route('admin.item.index')->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('admin.item.index')->with('success', 'Item berhasil dihapus!');
     }
 }
