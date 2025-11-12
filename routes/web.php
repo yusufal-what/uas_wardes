@@ -6,7 +6,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
+
+// Cart Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add-item', [CartController::class, 'addItem'])->name('cart.add-item');
+    Route::patch('/cart/update-quantity/{cartItem}', [CartController::class, 'updateQuantity'])->name('cart.update-quantity');
+    Route::delete('/cart/remove-item/{cartItem}', [CartController::class, 'removeItem'])->name('cart.remove-item');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
 
 // 🔑 Login Admin
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
