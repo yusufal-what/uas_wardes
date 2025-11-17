@@ -9,7 +9,7 @@
     body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
     .sidebar {
         width: 240px;
-        background: #0d6efd;
+        background: ForestGreen;
         color: white;
         position: fixed;
         height: 100%;
@@ -22,7 +22,7 @@
         text-decoration: none;
     }
     .sidebar a:hover {
-        background-color: #0b5ed7;
+        background-color: limegreen;
     }
     .content {
         margin-left: 250px;
@@ -42,13 +42,13 @@
     <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
     <a href="{{ route('admin.item.index') }}">🍱 Manajemen Menu</a>
     <a href="{{ route('admin.table.index') }}">🪑 Manajemen Meja</a>
-    <a href="{{ route('admin.pesanan.index') }}">status</a>
+    <a href="{{ route('admin.pesanan.index') }}">📋 status</a>
     {{-- <a href="{{ route('admin.pesanan') }}">🧾 Pesanan Masuk</a> --}}
     @auth
         <form method="POST" action="{{ route('logout') }}" class="mt-3 px-3">
             @csrf
-            <button type="submit" class="btn btn-light w-100 text-start">
-                Logout
+            <button type="submit" class="btn w-100 text-start" style="background-color: darkred; color: white;">
+                🚪 Logout
             </button>
         </form>
     @endauth
