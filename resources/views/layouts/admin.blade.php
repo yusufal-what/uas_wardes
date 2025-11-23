@@ -42,7 +42,7 @@
     <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
     <a href="{{ route('admin.item.index') }}">🍱 Manajemen Menu</a>
     <a href="{{ route('admin.table.index') }}">🪑 Manajemen Meja</a>
-    <a href="{{ route('admin.pesanan.index') }}">📋 status</a>
+    <a href="{{ route('admin.pesanan.index') }}">📋 Status Pesanan</a>
     {{-- <a href="{{ route('admin.pesanan') }}">🧾 Pesanan Masuk</a> --}}
     @auth
         <form method="POST" action="{{ route('logout') }}" class="mt-3 px-3">
