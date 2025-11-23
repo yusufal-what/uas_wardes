@@ -24,6 +24,25 @@
     .sidebar a:hover {
         background-color: #0b5ed7;
     }
+    .sidebar .logout-btn {
+        position: absolute;
+        bottom: 20px;
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+    .sidebar .logout-btn form button {
+        width: 100%;
+        background-color: #dc3545;
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        text-align: left;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .sidebar .logout-btn form button:hover {
+        background-color: #bb2d3b;
+    }
     .content {
         margin-left: 250px;
         padding: 20px;
@@ -42,8 +61,15 @@
     <a href="{{ route('admin.dashboard') }}">📊 Dashboard</a>
     <a href="{{ route('admin.item.index') }}">🍱 Manajemen Menu</a>
     <a href="{{ route('admin.table.index') }}">🪑 Manajemen Meja</a>
-    <a href="{{ route('admin.pesanan.index') }}">status</a>
+    <a href="{{ route('admin.pesanan.index') }}">📋 Status Pesanan</a>
     {{-- <a href="{{ route('admin.pesanan') }}">🧾 Pesanan Masuk</a> --}}
+    
+    <div class="logout-btn">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">🚪 Logout</button>
+        </form>
+    </div>
 </div>
 
 <div class="content">
