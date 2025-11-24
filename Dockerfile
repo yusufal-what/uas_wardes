@@ -4,14 +4,13 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci
 
 COPY . .
 
 RUN npm run build
 
 FROM php:8.2-fpm-alpine
-
 RUN apk add --no-cache \
     git \
     zip \
@@ -29,7 +28,6 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 COPY composer*.json ./
-
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -38,7 +36,6 @@ RUN composer install \
     --no-scripts
 
 COPY . .
-
 COPY --from=node-builder /app/public/build ./public/build
 
 RUN composer run-script post-autoload-dump
