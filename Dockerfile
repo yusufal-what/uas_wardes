@@ -1,55 +1,33 @@
-FROM node:20-alpine AS node-builder
-
+FROM node:20 AS node-builder
 WORKDIR /app
-
 COPY package*.json ./
-
-RUN npm ci
-
+RUN npm install
 COPY . .
-
 RUN npm run build
 
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev \
+    libjpeg-dev libfreetype6-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apk add --no-cache \
-    git \
-    zip \
-    unzip \
-    curl \
-    libpng \
-    libjpeg-turbo \
-    freetype \
-    && apk add --no-cache --virtual .build-deps \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql \
-    && apk del --no-cache .build-deps
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY composer*.json ./
-RUN composer install \
-    --no-dev \
-    --no-interaction \
-    --prefer-dist \
-    --optimize-autoloader \
-    --no-scripts
-
 COPY . .
-COPY --from=node-builder /app/public/build ./public/build
+COPY --from=node-builder /app/public/build public/build
 
-RUN composer run-script post-autoload-dump
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
-
-USER www-data
+    && chmod -R 755 /var/www/html \
+    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
