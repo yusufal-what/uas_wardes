@@ -11,17 +11,22 @@ COPY . .
 RUN npm run build
 
 FROM php:8.2-fpm-alpine
+
 RUN apk add --no-cache \
     git \
     zip \
     unzip \
     curl \
+    libpng \
+    libjpeg-turbo \
+    freetype \
+    && apk add --no-cache --virtual .build-deps \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql \
-    && apk del --no-cache freetype-dev libjpeg-turbo-dev libpng-dev
+    && apk del --no-cache .build-deps
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
