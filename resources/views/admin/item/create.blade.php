@@ -32,8 +32,8 @@
       <label class="form-label">Kategori</label>
       <select name="kategori" class="form-control" required>
         <option value="">-- Pilih Kategori --</option>
-        <option value="makanan">Makanan</option>
-        <option value="minuman">Minuman</option>
+        <option value="Makanan">Makanan</option>
+        <option value="Minuman">Minuman</option>
       </select>
     </div>
 

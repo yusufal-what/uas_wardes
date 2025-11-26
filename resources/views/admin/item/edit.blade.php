@@ -21,8 +21,8 @@
     <div class="mb-3">
       <label class="form-label">Kategori</label>
       <select name="kategori" class="form-control" required>
-        <option value="makanan" {{ $item->kategori == 'makanan' ? 'selected' : '' }}>Makanan</option>
-        <option value="minuman" {{ $item->kategori == 'minuman' ? 'selected' : '' }}>Minuman</option>
+        <option value="Makanan" {{ $item->kategori == 'Makanan' ? 'selected' : '' }}>Makanan</option>
+        <option value="Minuman" {{ $item->kategori == 'Minuman' ? 'selected' : '' }}>Minuman</option>
       </select>
     </div>
 

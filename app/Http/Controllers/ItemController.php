@@ -27,7 +27,7 @@ class ItemController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
+            'kategori' => 'required|in:Makanan,Minuman',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
@@ -59,7 +59,7 @@ class ItemController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|integer',
-            'kategori' => 'required|in:makanan,minuman',
+            'kategori' => 'required|in:Makanan,Minuman',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
