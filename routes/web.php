@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderExportController;
 
 // Login Admin
 Route::get('/admin/login', [AdminauthController::class, 'showLoginForm'])->name('admin.login');
@@ -17,6 +18,10 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 Route::get('/', [OrderController::class, 'index'])->name('customer.menu');
 Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
 Route::get('/order/history', [OrderController::class, 'history'])->name('order.history');
+
+Route::get('/admin/pesanan/export', [OrderExportController::class, 'export'])
+    ->name('orders.export');
+
 
 Route::prefix('/admin')->middleware(['auth', 'verified'])->group(function () {
     // Dashboard Admin
